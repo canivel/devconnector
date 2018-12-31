@@ -10,6 +10,7 @@ const User = require("../../models/User");
 
 //Validation
 const validateRegisterInput = require("../../validators/register");
+const validateSigninInput = require("../../validators/signin");
 
 // @route   GET api/users/test
 // @desc    Test Users Route
@@ -32,7 +33,7 @@ router.post("/register", async (req, res) => {
 
   if (user) {
     errors.email = "Email already registered";
-    return res.status(400).json({ errors });
+    return res.status(400).json(errors);
   } else {
     const avatar = await gravatar.url(req.body.email, {
       s: "200", //size
@@ -60,17 +61,22 @@ router.post("/register", async (req, res) => {
 // @desc    Signin Users Route / Returns a JWT Token
 // @access  Public
 router.post("/signin", async (req, res) => {
+  const { errors, isValid } = validateSigninInput(req.body);
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
   const email = req.body.email;
   const password = req.body.password;
 
   //find the user by email
   try {
     const user = await User.findOne({ email });
+
     //check if user exists
     if (!user) {
-      return res.status(404).json({
-        email: "Email not found."
-      });
+      errors.email = "User not found.";
+      return res.status(404).json(errors);
     }
 
     //check password
@@ -96,9 +102,8 @@ router.post("/signin", async (req, res) => {
         });
       }
     } else {
-      res.status(400).json({
-        password: "Password incorrect"
-      });
+      errors.password = "Password incorrect";
+      res.status(400).json(errors);
     }
   } catch (err) {
     return res.status(404).json({
