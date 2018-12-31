@@ -4,8 +4,12 @@ const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const keys = require("../../config/keys");
+const passport = require("passport");
 
 const User = require("../../models/User");
+
+//Validation
+const validateRegisterInput = require("../../validators/register");
 
 // @route   GET api/users/test
 // @desc    Test Users Route
@@ -18,11 +22,17 @@ router.get("/test", (req, res) => {
 // @desc    Register Users Route
 // @access  Public
 router.post("/register", async (req, res) => {
+  const { errors, isValid } = validateRegisterInput(req.body);
+
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
   const user = await User.findOne({ email: req.body.email });
+
   if (user) {
-    return res.status(400).json({
-      email: "Email already registered"
-    });
+    errors.email = "Email already registered";
+    return res.status(400).json({ errors });
   } else {
     const avatar = await gravatar.url(req.body.email, {
       s: "200", //size
@@ -73,12 +83,12 @@ router.post("/signin", async (req, res) => {
         avatar: user.avatar
       };
       try {
-        const jwtToken = await jwt.sign(payload, keys.secretKey, {
+        const jwtToken = await jwt.sign(payload, keys.secretOrKey, {
           expiresIn: 3600 * 4
         });
         res.json({
           success: true,
-          token: jwtToken
+          token: "Bearer " + jwtToken
         });
       } catch (err) {
         return res.status(404).json({
@@ -97,4 +107,18 @@ router.post("/signin", async (req, res) => {
   }
 });
 
+// @route   GET api/users/current
+// @desc    Return Current User
+// @access  Private
+router.get(
+  "/current",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    res.json({
+      id: req.user.id,
+      name: req.user.name,
+      email: req.user.email
+    });
+  }
+);
 module.exports = router;
