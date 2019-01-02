@@ -41,6 +41,66 @@ router.get(
   }
 );
 
+// @route   GET api/profile/all
+// @desc    Get All Profiles Route
+// @access  Public
+router.get("/all", async (req, res) => {
+  const errors = {};
+  try {
+    const profiles = await Profile.find().populate("user", ["name", "avatar"]);
+    if (!profiles) {
+      errors.noprofiles = "There are no profiles";
+      return res.status(404).json(errors);
+    }
+    return res.json(profiles);
+  } catch (err) {
+    return res.status(404).json(err);
+  }
+});
+
+// @route   GET api/profile/handle/:handle
+// @desc    Get Profile by Handle Route
+// @access  Public
+router.get("/handle/:handle", async (req, res) => {
+  const errors = {};
+  try {
+    const profile = await Profile.findOne({
+      handle: req.params.handle
+    }).populate("user", ["name", "avatar"]);
+    if (!profile) {
+      errors.noprofile = "There is no profile for this user";
+      return res.status(404).json(errors);
+    }
+    res.json(profile);
+  } catch (err) {
+    return res.status(404).json(err);
+  }
+});
+
+// @route   GET api/profile/user/:user_id
+// @desc    Get Profile by User ID Route
+// @access  Public
+router.get("/user/:user_id", async (req, res) => {
+  const errors = {};
+  try {
+    const profile = await Profile.findOne({
+      user: req.params.user_id
+    }).populate("user", ["name", "avatar"]);
+    if (!profile) {
+      errors.noprofile = "There is no profile for this user";
+      return res.status(404).json(errors);
+    }
+    return res.json(profile);
+  } catch (err) {
+    if (err.kind === "ObjectId") {
+      return res
+        .status(404)
+        .json({ profile: "There is no profile for this user" });
+    }
+    return res.status(404).json(err);
+  }
+});
+
 // @route   POST api/profile
 // @desc    Create User Profile Route
 // @access  Private
@@ -66,7 +126,7 @@ router.post(
     const profileFields = {
       ...req.body,
       user: req.user.id,
-      skills: skills.split(","),
+      skills: skills.split(",").map(item => item.trim()),
       social: { youtube, twitter, facebook, linkedin, instagram }
     };
     try {
