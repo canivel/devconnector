@@ -7,6 +7,9 @@ const passport = require("passport");
 const Profile = require("../../models/Profile");
 const User = require("../../models/User");
 
+//Load validation
+const validateProfileInput = require("../../validators/profile.js");
+
 // @route   GET api/profile/test
 // @desc    Test Profile Route
 // @access  Public
@@ -42,6 +45,12 @@ router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
+    const { errors, isValid } = validateProfileInput(req.body);
+
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+
     // Get fields
     const {
       skills,
