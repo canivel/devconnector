@@ -26,7 +26,10 @@ router.get(
   async (req, res) => {
     const errors = {};
     try {
-      const profile = await Profile.findOne({ user: req.user.id });
+      const profile = await Profile.findOne({ user: req.user.id }).populate(
+        "user",
+        ["name", "avatar"]
+      );
       if (!profile) {
         errors.noprofile = "There is no profile for this user";
         return res.status(404).json(errors);
@@ -67,7 +70,10 @@ router.post(
       social: { youtube, twitter, facebook, linkedin, instagram }
     };
     try {
-      const profile = await Profile.findOne({ user: req.user.id });
+      const profile = await Profile.findOne({ user: req.user.id }).populate(
+        "user",
+        ["name", "avatar"]
+      );
       if (profile) {
         //update profile
         const updatedProfile = await Profile.findOneAndUpdate(
