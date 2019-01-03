@@ -126,4 +126,22 @@ router.get(
     });
   }
 );
+
+// @route   DELETE api/profile/experience/:exp_id
+// @desc    Delete User Route
+// @access  Private
+router.delete(
+  "/",
+  passport.authenticate("jwt", {
+    session: false
+  }),
+  async (req, res) => {
+    try {
+      await User.findOneAndDelete({ user: req.user.id });
+      res.json({ success: true });
+    } catch (err) {
+      res.status(404).json({ profile: "There is no user with this id" });
+    }
+  }
+);
 module.exports = router;
