@@ -128,7 +128,7 @@ router.get(
 );
 
 // @route   DELETE api/profile/experience/:exp_id
-// @desc    Delete User Route
+// @desc    Delete User and Profile Route
 // @access  Private
 router.delete(
   "/",
@@ -137,7 +137,8 @@ router.delete(
   }),
   async (req, res) => {
     try {
-      await User.findOneAndDelete({ user: req.user.id });
+      await Profile.findOneAndDelete({ user: req.user.id });
+      await User.findOneAndDelete({ _id: req.user.id });
       res.json({ success: true });
     } catch (err) {
       res.status(404).json({ profile: "There is no user with this id" });
