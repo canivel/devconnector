@@ -4,10 +4,10 @@ export class Footer extends Component {
   render() {
     return (
       <footer className="page-footer blue-grey darken-3">
-        <div class="footer-copyright">
-          <div class="container">
+        <div className="footer-copyright">
+          <div className="container">
             &copy; {new Date().getFullYear()} Copyright DS Directory
-            <a class="grey-text text-lighten-4 right" href="#!">
+            <a className="grey-text text-lighten-4 right" href="#!">
               More Links
             </a>
           </div>
