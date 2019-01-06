@@ -29,7 +29,24 @@ export class Login extends Component {
   }
 
   renderContent = () => {
-    return <p className="grey-text">Modal Content</p>;
+    return (
+      <div className="row">
+        <form className="col s12">
+          <div className="row">
+            <div className="input-field col s12">
+              <input id="emailLogin" type="email" className="validate" />
+              <label htmlFor="emailLogin">Email</label>
+            </div>
+          </div>
+          <div className="row">
+            <div className="input-field col s12">
+              <input id="passwordLogin" type="password" className="validate" />
+              <label htmlFor="passwordLogin">Password</label>
+            </div>
+          </div>
+        </form>
+      </div>
+    );
   };
 
   render() {
