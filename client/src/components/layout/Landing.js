@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import Register from "../auth/Register";
+import Login from "../auth/Login";
 
 export class Landing extends Component {
   render() {
@@ -15,20 +17,8 @@ export class Landing extends Component {
                   help from other scientists
                 </p>
                 <div className="row">
-                  <Link
-                    to="/register"
-                    className="waves-effect waves-light btn-flat green lighten-1 white-text"
-                  >
-                    Sign Up
-                  </Link>
-
-                  <Link
-                    to="/login"
-                    className="waves-effect waves-light btn-flat blue white-text"
-                    style={{ marginLeft: "10px" }}
-                  >
-                    Login
-                  </Link>
+                  <Register />
+                  <Login />
                 </div>
               </div>
             </div>

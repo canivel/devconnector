@@ -2,43 +2,49 @@ import React, { Component } from "react";
 import Modal from "../layout/Modal";
 
 export class Register extends Component {
-  state = {
-    view: { showModal: false }
-  };
-  handleHideModal = () => {
-    this.setState({ view: { showModal: false } });
-  };
-  handleShowModal = () => {
-    this.setState({ view: { showModal: true } });
-  };
   renderActions() {
     return (
-      <React.Fragment>
-        <button className="modal-close waves-effect waves-grey btn-flat grey">
+      <>
+        <button className="modal-close waves-effect waves-red btn-flat grey white-text left">
           Cancel
         </button>
-        <button className="modal-close waves-effect waves-green btn-flat green">
+        <button className="modal-close waves-effect waves-green btn-flat green white-text right">
           Create
         </button>
-      </React.Fragment>
+      </>
     );
   }
+
+  renderBtn() {
+    return (
+      <button
+        className="waves-effect waves-light btn modal-trigger"
+        data-target="registerModal"
+      >
+        Register
+      </button>
+    );
+  }
+
+  renderHeader() {
+    return <h4 className="grey-text">Create new Account</h4>;
+  }
+
+  renderContent = () => {
+    return <p className="grey-text">Modal Content</p>;
+  };
+
   render() {
     return (
       <>
-        <button
-          className="waves-effect waves-light btn-flat green lighten-1 white-text"
-          data-target="registerModal"
-        >
-          Register
-        </button>
+        {this.renderBtn()}
         <Modal
-          title="Create new Account"
           modalId="registerModal"
-          content="Modal Content"
+          header={this.renderHeader()}
+          content={this.renderContent()}
           actions={this.renderActions()}
           modalClassName="modal modal-fixed-footer"
-          dismissible={false}
+          dismissible={true}
         />
       </>
     );

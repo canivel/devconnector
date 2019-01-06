@@ -39,11 +39,11 @@ class Modal extends Component {
             this.Modal = Modal;
           }}
           id={this.props.modalId}
-          className={this.props.modalClassName}
+          className="modal"
         >
           <div className="modal-content">
-            <h4>{this.props.title}</h4>
-            <p>{this.props.content}</p>
+            {this.props.header}
+            {this.props.content}
           </div>
           <div className="modal-footer">{this.props.actions}</div>
         </div>
