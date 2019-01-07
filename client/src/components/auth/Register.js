@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Modal from "../layout/Modal";
-
+import { RegisterForm } from "./RegisterForm";
+import { connect } from "react-redux";
+import { registerNewAccount } from "../../actions";
 export class Register extends Component {
   renderActions() {
     return (
@@ -30,39 +32,14 @@ export class Register extends Component {
     return <h4 className="grey-text">Create new Account</h4>;
   }
 
+  onSubmit = formValues => {
+    this.props.registerNewAccount(formValues);
+  };
+
   renderContent = () => {
     return (
       <div className="row">
-        <form className="col s12">
-          <div className="row">
-            <div className="input-field col s12">
-              <input id="name" type="text" className="validate" />
-              <label htmlFor="name">Name</label>
-            </div>
-          </div>
-          <div className="row">
-            <div className="input-field col s12">
-              <input id="email" type="email" className="validate" />
-              <label htmlFor="email">Email</label>
-            </div>
-          </div>
-          <div className="row">
-            <div className="input-field col s12">
-              <input id="password" type="password" className="validate" />
-              <label htmlFor="password">Password</label>
-            </div>
-          </div>
-          <div className="row">
-            <div className="input-field col s12">
-              <input
-                id="confirmPassword"
-                type="password"
-                className="validate"
-              />
-              <label htmlFor="confirmPassword">Confirm Password</label>
-            </div>
-          </div>
-        </form>
+        <RegisterForm onSubmit={this.onSubmit} />
       </div>
     );
   };
@@ -84,4 +61,7 @@ export class Register extends Component {
   }
 }
 
-export default Register;
+export default connect(
+  null,
+  { registerNewAccount }
+)(Register);
