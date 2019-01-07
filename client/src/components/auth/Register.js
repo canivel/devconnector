@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Modal from "../layout/Modal";
-import { RegisterForm } from "./RegisterForm";
+import RegisterForm from "./RegisterForm";
 import { connect } from "react-redux";
 import { registerNewAccount } from "../../actions";
 export class Register extends Component {

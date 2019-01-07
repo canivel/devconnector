@@ -4,15 +4,19 @@ import { Field, reduxForm } from "redux-form";
 export class RegisterForm extends Component {
   renderError({ error, touched }) {
     if (touched && error) {
-      return <span class="helper-text" data-error={error} />;
+      return (
+        <span className="helper-text red-text left" data-error={error}>
+          {error || ""}
+        </span>
+      );
     }
   }
 
-  renderInput = ({ input, label, meta }) => {
+  renderInput = ({ input, label, meta, type }) => {
     return (
       <div className="input-field col s12">
         <label>{label}</label>
-        <input {...input} autoComplete="off" />
+        <input {...input} type={type} autoComplete="off" className="validate" />
         {this.renderError(meta)}
       </div>
     );
@@ -23,6 +27,7 @@ export class RegisterForm extends Component {
   };
 
   render() {
+    console.log(this.props);
     return (
       <form
         onSubmit={this.props.handleSubmit(this.onSubmit)}
@@ -32,25 +37,25 @@ export class RegisterForm extends Component {
           name="name"
           type="text"
           component={this.renderInput}
-          label="Enter Name"
+          label="Name"
         />
         <Field
           name="email"
           type="email"
           component={this.renderInput}
-          label="Enter Name"
+          label="Email"
         />
         <Field
           name="password"
           type="password"
           component={this.renderInput}
-          label="Enter Name"
+          label="Password"
         />
         <Field
           name="confirmPassword"
           type="password"
           component={this.renderInput}
-          label="Enter Name"
+          label="Confirm Password"
         />
       </form>
     );
